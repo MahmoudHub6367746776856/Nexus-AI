@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+const IS_VERCEL = !!process.env.VERCEL;
 const PORT = process.env.PORT ? Number(process.env.PORT) || 5000 : 5000;
 const DB_PATH = path.join(__dirname, '..', 'database.json');
 
@@ -20,6 +21,10 @@ function readDatabase() {
 }
 
 function writeDatabase(data) {
+  // Avoid writing to disk on Vercel's read-only filesystem
+  if (IS_VERCEL) {
+    return;
+  }
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
 }
 
@@ -69,6 +74,10 @@ app.delete('/api/admin/waitlist/:index', requireAdmin, (req, res) => {
   res.json({ success: true });
 });
 
-app.listen(PORT, () => {
-  console.log(`Nexus AI server running on http://localhost:${PORT}`);
-});
+if (!IS_VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Nexus AI server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
