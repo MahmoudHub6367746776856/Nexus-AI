@@ -1,0 +1,18 @@
+{
+  "name": "nexus-ai",
+  "version": "1.0.0",
+  "description": "Nexus AI - Full-Stack SaaS Landing Page",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"node server/index.js\" \"npm run dev --prefix client\"",
+    "server": "node server/index.js",
+    "client": "npm run dev --prefix client"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
