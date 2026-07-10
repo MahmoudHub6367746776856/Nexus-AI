@@ -1,4 +1,5 @@
 {
+  "name": "nexus-ai",
   "version": 2,
   "builds": [
     {
@@ -19,8 +20,13 @@
       "dest": "/server/index.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "src": "^/(?!api|client)(.*)",
+      "dest": "/client/$1"
+    },
+    { "handle": "filesystem" },
+    {
+      "src": ".*",
+      "dest": "/client/index.html"
     }
   ]
 }

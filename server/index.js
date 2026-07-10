@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 const IS_VERCEL = !!process.env.VERCEL;
 const PORT = process.env.PORT ? Number(process.env.PORT) || 5000 : 5000;
-const DB_PATH = path.join(__dirname, '..', 'database.json');
+const DB_PATH = IS_VERCEL ? path.join('/tmp', 'database.json') : path.join(__dirname, '..', 'database.json');
 
 app.use(cors());
 app.use(express.json());
@@ -21,10 +21,7 @@ function readDatabase() {
 }
 
 function writeDatabase(data) {
-  // Avoid writing to disk on Vercel's read-only filesystem
-  if (IS_VERCEL) {
-    return;
-  }
+  // Vercel allows writing to /tmp directory safely
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
 }
 
